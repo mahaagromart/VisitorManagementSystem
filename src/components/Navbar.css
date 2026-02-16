@@ -1,0 +1,104 @@
+.navbarHeader {
+  background: #f8f9fa;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+}
+
+.navbarContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 70px;
+  background: #777BD9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(119, 123, 217, 0.3);
+  transition: all 0.3s ease;
+}
+
+.navbarContainer:hover {
+  box-shadow: 0 6px 24px rgba(119, 123, 217, 0.4);
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logoIcon {
+  margin-top: 0;
+  animation: gentlePulse 2s infinite;
+}
+
+@keyframes gentlePulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.titleText {
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.userContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 4px 12px;
+  border-radius: 40px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.userContainer:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.userName {
+  color: white;
+  font-weight: 500;
+  margin: 0 4px;
+}
+
+.avatarIcon {
+  background: #4a4f9a;
+  transition: all 0.3s ease;
+}
+
+.userContainer:hover .avatarIcon {
+  transform: scale(1.1);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .navbarContainer {
+    padding: 0 16px;
+    height: 60px;
+  }
+  
+  .titleText {
+    font-size: 16px;
+  }
+  
+  .userName {
+    display: none;
+  }
+}

@@ -1,0 +1,459 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+/* ===== SIZE CONTROL VARIABLES - CHANGE THESE TO ADJUST FORM SIZE ===== */
+:root {
+    /* Container Size - Adjust these to make form bigger or smaller */
+    --container-max-width: 1200px;  /* Change this (800px = smaller, 1200px = larger) */
+    --container-height: 650px;       /* Change this (500px = smaller, 700px = larger) */
+    
+    /* Form Padding - Adjust spacing inside the form */
+    --form-padding: 40px 40px;       /* Change this (less = smaller, more = larger) */
+    
+    /* Image Container */
+    --image-flex: 1.3;                /* Change this (1 = smaller image, 1.3 = larger image) */
+    --image-min-height: 280px;        /* Minimum height for image */
+    
+    /* Typography Scale */
+    --heading-size: 26px;             /* Main heading size */
+    --subheading-size: 14px;           /* Subheading size */
+    --label-size: 12px;                /* Form label size */
+    --input-size: 13px;                 /* Input text size */
+    --button-size: 15px;                /* Button text size */
+    
+    /* Spacing */
+    --header-margin: 24px;              /* Space below header */
+    --form-group-margin: 16px;          /* Space between form fields */
+    --designation-gap: 12px;             /* Gap between designation cards */
+}
+
+/* Main Container */
+.login-container {
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f5f5;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    padding: 20px;
+}
+
+/* Login Content Container */
+.login-content {
+    display: flex;
+    max-width: var(--container-max-width);
+    width: 100%;
+    height: var(--container-height);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    border-radius: 24px;
+    overflow: hidden;
+    background-color: white;
+}
+
+/* Login Form Styling */
+.login-form {
+    flex: 1;
+    padding: var(--form-padding);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: white;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Image Container */
+.login-image-container {
+    flex: var(--image-flex);
+    position: relative;
+    background-color: #f0f2f5;
+    display: flex;
+    align-items: flex-end;
+    min-height: var(--image-min-height);
+    /* Add padding to the image container */
+    padding: 0; /* No padding by default, image covers full area */
+}
+
+/* To add padding AROUND the image (creates border inside container) */
+.login-image-container.with-padding {
+    padding: 20px; /* Add padding around the image */
+}
+
+/* The image itself */
+.login-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('src/assets/login2.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #e0e5ec;
+    /* Add border radius if you want rounded corners with padding */
+    /* border-radius: 16px; */
+}
+
+/* If you want padding INSIDE the image (creates space between image edge and content) */
+.login-image.with-inset-padding {
+    background-origin: content-box;
+    background-clip: content-box;
+    padding: 20px; /* This will create space around the image */
+    box-sizing: border-box;
+}
+
+/* Fallback gradient if image doesn't load */
+.login-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+    z-index: 0;
+}
+
+/* Option 1: Add padding to the overlay only (text content) */
+.image-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 32px; /* Controls text padding from edges */
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3), transparent);
+    color: white;
+    z-index: 1;
+}
+
+/* Option 2: Add padding to the entire image container with overlay adjustment */
+.login-image-container.padded-container {
+    padding: 16px; /* Adds space around the entire image container */
+}
+
+.login-image-container.padded-container .login-image {
+    border-radius: 16px; /* Optional: rounded corners */
+    overflow: hidden;
+}
+
+.login-image-container.padded-container .image-overlay {
+    left: 16px; /* Match container padding */
+    right: 16px; /* Match container padding */
+    bottom: 16px; /* Match container padding */
+    border-radius: 0 0 16px 16px; /* Optional: rounded corners on overlay */
+}
+
+.image-overlay h2 {
+    font-size: var(--heading-size);
+    margin-bottom: 8px;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: -0.3px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.image-overlay p {
+    font-size: var(--subheading-size);
+    opacity: 0.95;
+    line-height: 1.5;
+    font-weight: 400;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    max-width: 90%;
+}
+
+/* Form Styles */
+.form-header {
+    margin-bottom: var(--header-margin);
+    text-align: left;
+}
+
+.form-header h1 {
+    font-size: var(--heading-size);
+    margin-bottom: 6px;
+    color: #1a1a1a;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: -0.3px;
+}
+
+.form-header p {
+    color: #666666;
+    font-size: var(--subheading-size);
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+/* Designation Label */
+.designation-label {
+    font-size: var(--label-size);
+    font-weight: 600;
+    color: #4a4a4a;
+    letter-spacing: 0.4px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Designation Selection Styles */
+.designation-options {
+    display: flex;
+    gap: var(--designation-gap);
+    margin-bottom: 20px;
+}
+
+.designation-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 14px 12px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 12px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 0;
+}
+
+.designation-card:hover {
+    border-color: #999999;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+}
+
+.designation-card.selected {
+    border-color: #4a90e2;
+    background-color: #f8fbff;
+    box-shadow: 0 3px 8px rgba(74, 144, 226, 0.1);
+}
+
+.designation-icon-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.designation-icon {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4a4a4a;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    padding: 6px;
+}
+
+.designation-card.selected .designation-icon {
+    color: #4a90e2;
+    background-color: #e8f0fe;
+}
+
+.designation-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 1.5;
+}
+
+.designation-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.designation-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 1px;
+    line-height: 1.3;
+    font-family: 'Poppins', sans-serif;
+}
+
+.designation-subtitle {
+    font-size: 10px;
+    color: #888888;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.2px;
+    font-weight: 500;
+    margin-bottom: 3px;
+}
+
+.designation-description {
+    font-size: 10px;
+    color: #666666;
+    line-height: 1.3;
+    font-weight: 400;
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: var(--form-group-margin);
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: var(--label-size);
+    color: #4a4a4a;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: var(--input-size);
+    transition: all 0.2s ease;
+    background-color: #ffffff;
+    height: 44px;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
+}
+
+.form-input::placeholder {
+    color: #aaaaaa;
+    font-size: var(--input-size);
+    font-weight: 400;
+}
+
+.form-input.error {
+    border-color: #dc3545;
+}
+
+/* Password field container */
+.password-field {
+    position: relative;
+}
+
+.password-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    z-index: 2;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.password-toggle:hover {
+    color: #4a90e2;
+    background-color: #f5f5f5;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 11px;
+    margin-top: 4px;
+    font-weight: 500;
+    padding-left: 4px;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 14px;
+    background-color: #4a4a4a;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: var(--button-size);
+    font-weight: 600;
+    transition: all 0.2s ease;
+    margin: 12px 0 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 46px;
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 0.3px;
+}
+
+.submit-button:hover:not(:disabled) {
+    background-color: #333333;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media screen and (max-width: 992px) {
+    .login-content {
+        flex-direction: row;
+        height: auto;
+        max-width: 900px;
+    }
+
+    .login-image-container {
+        flex: 1;
+        min-height: 350px;
+    }
+
+    .login-form {
+        padding: 32px;
+    }
+
+    .image-overlay {
+        padding: 28px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .login-content {
+        flex-direction: column;
+        height: auto;
+        max-width: 450px;
+    }
+
+    .login-image-container {
+        height: 240px;
+        width: 100%;
+        min-height: 240px;
+    }
+
+    .login-form {
+        padding: 28px;
+    }
+
+    .image-overlay {
+        padding: 24px;
+    }
+}

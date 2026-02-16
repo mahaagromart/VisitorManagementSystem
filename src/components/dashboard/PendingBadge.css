@@ -1,0 +1,9 @@
+.pendingBadge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #fff7e6;
+  padding: 2px 12px;
+  border-radius: 20px;
+  border: 1px solid #ffe58f;
+}

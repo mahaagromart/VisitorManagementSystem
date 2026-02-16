@@ -1,0 +1,78 @@
+.homeContainer {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+  padding: 40px 24px;
+}
+
+.contentCard {
+  border-radius: 24px !important;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08) !important;
+  border: none !important;
+  overflow: hidden;
+  background: white;
+}
+
+.optionsTitle {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.optionsMainTitle {
+  margin-bottom: 8px !important;
+  color: #1a1a1a !important;
+  font-weight: 600 !important;
+}
+
+.optionsSubtitle {
+  font-size: 16px;
+  color: #666;
+}
+
+.approvalHeader {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.approvalTitle {
+  color: #1a1a1a !important;
+  margin-bottom: 8px !important;
+}
+
+.divider {
+  margin: 16px auto !important;
+  width: 100px;
+  border-color: #1890ff !important;
+  border-width: 2px !important;
+}
+
+.tabContainer {
+  margin-top: 16px;
+}
+
+.tabItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 40px;
+  transition: all 0.3s ease;
+}
+
+.tabItemActive {
+  background: linear-gradient(135deg, #1890ff10, #1890ff20);
+}
+
+.tabIcon {
+  font-size: 18px;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .homeContainer {
+    padding: 20px 16px;
+  }
+  
+  .optionsMainTitle {
+    font-size: 24px !important;
+  }
+}

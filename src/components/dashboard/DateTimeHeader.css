@@ -1,0 +1,17 @@
+.dateTimeHeader {
+  background: linear-gradient(135deg, #f0f5ff 0%, #e6f7ff 100%);
+  padding: 20px 24px;
+  border-radius: 16px;
+  margin-bottom: 32px;
+}
+
+.dateLabel, .timeLabel {
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.dateValue, .timeValue {
+  margin: 0 !important;
+  color: #1890ff !important;
+  font-weight: 600 !important;
+}

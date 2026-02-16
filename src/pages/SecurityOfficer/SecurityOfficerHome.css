@@ -1,0 +1,285 @@
+.homeContainer {
+  padding: 24px;
+  background: #f8f9fa;
+  min-height: calc(100vh - 70px);
+}
+
+.contentCard {
+  border-radius: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  border: none;
+  background: white;
+}
+
+.dateTimeHeader {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 30px 24px;
+  margin: -24px -24px 24px -24px;
+  border-radius: 30px 30px 0 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.dateTimeHeader::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.dateSection, .timeSection {
+  position: relative;
+  z-index: 1;
+}
+
+.dateLabel, .timeLabel {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 16px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dateValue, .timeValue {
+  color: white;
+  margin: 0;
+  font-weight: 600;
+  font-size: 24px;
+}
+
+.optionsTitle {
+  text-align: center;
+  margin-bottom: 40px;
+  margin-top: 20px;
+}
+
+.optionsMainTitle {
+  color: #1a1a1a;
+  margin-bottom: 16px;
+  font-weight: 700;
+  font-size: 32px;
+}
+
+.optionsSubtitle {
+  color: #666;
+  font-size: 16px;
+}
+
+.optionCard {
+  border-radius: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid transparent;
+  height: 100%;
+  background: white;
+}
+
+.optionCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  border-color: #667eea !important;
+}
+
+.optionIconWrapper {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  transition: all 0.3s ease;
+}
+
+.optionCard:hover .optionIconWrapper {
+  transform: scale(1.1);
+}
+
+.optionIcon {
+  font-size: 45px;
+}
+
+.optionTitle {
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.optionDescription {
+  color: #666;
+  font-size: 14px;
+}
+
+.pendingBadge {
+  margin-top: 12px;
+}
+
+.statsCard {
+  border-radius: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  height: 100%;
+}
+
+.statsCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+}
+
+.statsIconWrapper {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  transition: all 0.3s ease;
+}
+
+.statsCard:hover .statsIconWrapper {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.statsTitle {
+  color: white;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.statsContent {
+  color: white;
+  opacity: 0.9;
+  line-height: 1.8;
+}
+
+.statsItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 16px;
+}
+
+.backButton {
+  margin-bottom: 16px;
+  border-radius: 40px;
+  transition: all 0.3s ease;
+}
+
+.backButton:hover {
+  transform: translateX(-5px);
+}
+
+.approvalHeader {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.approvalTitle {
+  color: #667eea;
+  margin: 0;
+  font-weight: 700;
+  font-size: 28px;
+}
+
+.divider {
+  margin-top: 16px;
+  margin-bottom: 24px;
+  border-color: #e8e8e8;
+}
+
+.tabContainer {
+  margin-bottom: 24px;
+}
+
+.tabItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 40px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.tabItemActive {
+  background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+  color: #667eea;
+}
+
+.tabIcon {
+  font-size: 22px;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .homeContainer {
+    padding: 16px;
+  }
+  
+  .dateTimeHeader {
+    padding: 20px 16px;
+  }
+  
+  .dateValue, .timeValue {
+    font-size: 18px;
+  }
+  
+  .optionsMainTitle {
+    font-size: 24px;
+  }
+  
+  .optionIconWrapper {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .optionIcon {
+    font-size: 35px;
+  }
+  
+  .approvalTitle {
+    font-size: 22px;
+  }
+  
+  .tabItem {
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .dateTimeHeader {
+    text-align: center;
+  }
+  
+  .timeSection {
+    text-align: center !important;
+    float: none !important;
+  }
+  
+  .timeLabel {
+    justify-content: center;
+  }
+}
