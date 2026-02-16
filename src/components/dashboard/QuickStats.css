@@ -27,7 +27,7 @@
 .statsTitle {
   text-align: center;
   margin-bottom: 20px !important;
-  color: #1a1a1a;
+  color: #ffffff;
 }
 
 .statsContent {
@@ -47,7 +47,7 @@
 }
 
 .statsItem span {
-  color: #666;
+  color: #ffffff;
 }
 
 .statsItem strong {

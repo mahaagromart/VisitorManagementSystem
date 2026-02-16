@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Layout } from "antd";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import ManagementOfficerRoute from "../routes/ManagementOfficerRoute";
@@ -45,6 +46,7 @@ const AppLayout = () => {
           <SecurityOfficerRoute />
         )}
       </Content>
+      <Footer/>
     </Layout>
   );
 };

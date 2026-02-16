@@ -1,104 +1,342 @@
 .navbarHeader {
-  background: #f8f9fa;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 0;
   position: sticky;
   top: 0;
   z-index: 1000;
   width: 100%;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
 }
 
 .navbarContainer {
   max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 24px;
-  height: 70px;
-  background: #777BD9;
+  margin: -8px auto;
+  padding: 0 32px;
+  height: 80px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(119, 123, 217, 0.3);
   transition: all 0.3s ease;
 }
 
-.navbarContainer:hover {
-  box-shadow: 0 6px 24px rgba(119, 123, 217, 0.4);
+@supports (backdrop-filter: blur(10px)) {
+  .navbarHeader {
+    background: rgba(102, 126, 234, 0.9);
+    backdrop-filter: blur(10px);
+  }
 }
 
 .logoContainer {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
+  cursor: pointer;
 }
 
 .logoIcon {
-  margin-top: 0;
-  animation: gentlePulse 2s infinite;
+  font-size: 32px;
+  color: white;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation: floatIcon 3s ease-in-out infinite;
 }
 
-@keyframes gentlePulse {
-  0% {
-    transform: scale(1);
+.logoIcon:hover {
+  transform: rotate(360deg) scale(1.1);
+  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.2));
+}
+
+@keyframes floatIcon {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
   }
   50% {
-    transform: scale(1.05);
-  }
-  100% {
-    transform: scale(1);
+    transform: translateY(-5px) rotate(5deg);
   }
 }
 
-.titleText {
+.logoText {
+  display: flex;
+  flex-direction: column;
+}
+
+.logoMainText {
   color: white;
-  font-size: 18px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+  font-size: 24px;
+  font-weight: 700;
   margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.logoSubText {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 12px;
+  margin: 0;
+  letter-spacing: 0.5px;
+  font-weight: 300;
 }
 
 .userContainer {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   cursor: pointer;
-  padding: 4px 12px;
-  border-radius: 40px;
+  padding: 6px 20px;
+  border-radius: 50px;
   transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  
 }
 
 .userContainer:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.25);
   transform: translateY(-2px);
+  box-shadow: 0 10px 2px -5px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.userGreeting {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  margin: 0;
+  line-height: 1.2;
 }
 
 .userName {
   color: white;
-  font-weight: 500;
-  margin: 0 4px;
+  font-weight: 600;
+  font-size: 15px;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: 0.3px;
 }
 
 .avatarIcon {
-  background: #4a4f9a;
+  background: linear-gradient(135deg, #4a4f9a 0%, #6b6fcf 100%);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .userContainer:hover .avatarIcon {
-  transform: scale(1.1);
+  transform: scale(1.1) rotate(5deg);
+  border-color: white;
+}
+
+.dropdownIcon {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  transition: transform 0.3s ease;
+}
+
+.userContainer:hover .dropdownIcon {
+  transform: rotate(180deg);
+  color: white;
+}
+
+.notificationBell {
+  position: relative;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.notificationBell:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.notificationBadge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #ff4d4f;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #667eea;
 }
 
 /* Responsive styles */
-@media (max-width: 768px) {
-  .navbarContainer {
-    padding: 0 16px;
-    height: 60px;
+@media (max-width: 992px) {
+  .logoMainText {
+    font-size: 20px;
   }
   
-  .titleText {
+  .logoSubText {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbarContainer {
+    padding: 0 20px;
+    height: 78px;
+  }
+  
+  .userContainer {
+    padding: 4px 12px;
+    gap: 8px;
+  }
+  
+  .userInfo {
+    display: none;
+  }
+  
+  .logoMainText {
+    font-size: 18px;
+  }
+  
+  /* Keep logoSubText visible on tablets */
+  .logoSubText {
+    font-size: 10px;
+    display: block;
+  }
+  
+  .logoIcon {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 580px) {
+  .navbarContainer {
+    padding: 0 16px;
+    height: 65px;
+  }
+  
+  .logoContainer {
+    gap: 10px;
+  }
+  
+  .logoText {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .logoMainText {
+    font-size: 16px;
+    line-height: 1.1;
+  }
+  
+  /* Show Power By MAIDC on mobile devices with adjusted styling */
+  .logoSubText {
+    font-size: 9px;
+    display: block;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.2;
+  }
+  
+  .logoIcon {
+    font-size: 24px;
+  }
+  
+  .userContainer {
+    padding: 4px 8px;
+  }
+  
+  .avatarIcon {
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+  }
+  
+  .avatarIcon .anticon {
     font-size: 16px;
   }
   
-  .userName {
-    display: none;
+  .notificationBell .anticon {
+    font-size: 18px !important;
   }
+}
+
+@media (max-width: 480px) {
+  .navbarContainer {
+    padding: 0 20px;
+    height: 82px;
+  }
+  
+  .logoIcon {
+    font-size: 22px;
+  }
+  
+  .logoMainText {
+    font-size: 15px;
+  }
+  
+  /* Ensure "Power By MAIDC" is visible on very small screens */
+  .logoSubText {
+    font-size: 8px;
+    display: block;
+    letter-spacing: 0.3px;
+  }
+  
+  .userContainer {
+    padding: 3px 6px;
+  }
+  
+  .avatarIcon {
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+  }
+  
+  .notificationBadge {
+    font-size: 9px;
+    min-width: 16px;
+    height: 16px;
+    padding: 1px 4px;
+  }
+}
+
+/* Remove unused styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+
+.customDropdown .ant-dropdown-menu {
+  min-width: 100px !important;
+  width: 100px !important;
+  padding: 4px 0 !important;
+  
+}
+
+.customDropdown .ant-dropdown-menu-item {
+  padding: 6px 12px !important;
+  font-size: 13px;
 }
