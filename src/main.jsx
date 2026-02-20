@@ -2,20 +2,24 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import React from "react";
 import { Provider } from "react-redux";
-import { store } from "./redux/store";
+import { store, persistor } from "./redux/store";
 import { BrowserRouter } from "react-router-dom";
+import { PersistGate } from "redux-persist/integration/react";
 import "./index.css";
 import App from "./App.jsx";
 import "antd/dist/reset.css";
+import { registerSW } from "virtual:pwa-register";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-const queryClient = new QueryClient();
+registerSW({ immediate: true });
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <App />
-      </QueryClientProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </PersistGate>
     </Provider>
-  </StrictMode>,
+  </StrictMode>
 );

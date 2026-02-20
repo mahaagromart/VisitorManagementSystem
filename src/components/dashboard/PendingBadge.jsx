@@ -10,7 +10,7 @@ const PendingBadge = ({ count }) => {
       <Statistic 
         value={count} 
         suffix="pending"
-        valueStyle={{ fontSize: "14px", color: "#faad14" }}
+        styles={{ fontSize: "14px", color: "#faad14" }}
       />
     </div>
   );

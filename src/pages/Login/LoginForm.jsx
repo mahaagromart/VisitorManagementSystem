@@ -1,12 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useState } from "react";
 import { Eye, EyeOff, User, Shield } from "lucide-react";
 import "./LoginForm.css";
+import axios from 'axios';
+import { useDispatch } from "react-redux";
+import { login } from "../../redux/Features/AuthSlice";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const navigate = useNavigate();
+  
+  const dispatch = useDispatch();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   // Initial form values
   const initialValues = {
@@ -28,16 +38,151 @@ const LoginForm = () => {
   });
 
   // Handle form submission
-  const handleSubmit = (values, { setSubmitting, resetForm }) => {
-    console.log("Login Data:", values);
-    
-    // Simulate API call
-    setTimeout(() => {
-      alert(`Login attempted as ${values.Designation}\nEmail: ${values.EmailId}`);
-      setSubmitting(false);
+    // const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    //   setLoading(true);
+    //   setError('');
+    //   setSuccess('');
+
+    //   try {
+    //     const response = await axios.post(
+    //       `${API_URL}auth/login`,
+    //       {
+    //         email: values.EmailId,      
+    //         password: values.Password
+    //       },
+    //       {
+    //         headers: { 'Content-Type': 'application/json' }
+    //       }
+    //     );
+
+    //     console.log("Login Response:", response.data);
+
+    //     if (response.data.success) {
+    //       const { data } = response.data;
+
+    //       // ✅ Correctly mapped from API response
+    //       const userData = {
+    //         user: data.user.username,       // was: data.username
+    //         token: data.token,              // was: data.accessToken
+    //         role: data.role,                // ✅ correct
+    //         email: data.user.email,         // was: data.email
+    //         UserId: data.UserId,            // was: data.userId
+    //         isLogged: true                  // ✅ correct
+    //       };
+
+    //       dispatch(login(userData));
+
+    //       // ✅ localStorage correctly mapped
+    //       localStorage.setItem('user', data.user.username);
+    //       localStorage.setItem('token', data.token);
+    //       localStorage.setItem('role', data.role);
+    //       localStorage.setItem('email', data.user.email);
+    //       localStorage.setItem('UserId', data.UserId);
+
+    //       navigate("/");
+    //       setSuccess('Login successful!');
+    //       resetForm();
+    //     }
+
+    //   } catch (err) {
+    //     console.error("Login Error:", err);
+    //     setError(
+    //       err.response?.data?.message ||
+    //       'Login failed. Please check your credentials and try again.'
+    //     );
+    //   } finally {
+    //     setLoading(false);
+    //     setSubmitting(false);
+    //   }
+    // };
+
+    const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+  setLoading(true);
+  setError('');
+  setSuccess('');
+
+  try {
+    const response = await axios.post(
+      `${API_URL}auth/login`,
+      {
+        email: values.EmailId,
+        password: values.Password
+      },
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+
+    console.log("Login Response:", response.data);
+
+    if (response.data.success) {
+      const { data } = response.data;
+
+      // ✅ Map selected designation to API role
+      const designationToRole = {
+        'Managing Officer': 'MANAGEMENTOFFICER',
+        'Security Officer': 'SECURITYOFFICER',
+      };
+
+      const selectedRole = designationToRole[values.Designation];
+
+      // ✅ Role mismatch check
+      if (data.role !== selectedRole) {
+        setError(
+          `Access denied. You selected "${values.Designation}" but your account role is "${data.role}". Please select the correct designation.`
+        );
+        setLoading(false);
+        setSubmitting(false);
+        return;
+      }
+
+      // ✅ Role matched — proceed with login
+      const userData = {
+        user: data.user.username,
+        token: data.token,
+        role: data.role,
+        email: data.user.email,
+        UserId: data.UserId,
+        isLogged: true
+      };
+
+      dispatch(login(userData));
+
+      // localStorage.setItem('user', data.user.username);
+      // localStorage.setItem('token', data.token);
+      // localStorage.setItem('role', data.role);
+      // localStorage.setItem('email', data.user.email);
+      // localStorage.setItem('UserId', data.UserId);
+
+      // ✅ Navigate based on role
+      if (data.role === 'MANAGEMENTOFFICER') {
+        navigate('/');
+      } else if (data.role === 'SECURITYOFFICER') {
+        navigate('/');
+      } else if (data.role === 'ADMIN') {
+        navigate('/');
+      }
+
+      setSuccess('Login successful!');
       resetForm();
-    }, 1500);
-  };
+    }
+
+  } catch (err) {
+    console.error("Login Error:", err);
+    setError(
+      err.response?.data?.message ||
+      'Login failed. Please check your credentials and try again.'
+    );
+  } finally {
+    setLoading(false);
+    setSubmitting(false);
+  }
+};
+
+
+
+
+
+
+
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevState) => !prevState);
@@ -63,6 +208,32 @@ const LoginForm = () => {
             <p>Please enter your credentials to continue</p>
           </div>
 
+          {error && (
+            <div className="alert alert-error" style={{ 
+              color: '#721c24', 
+              marginBottom: '15px', 
+              padding: '12px', 
+              backgroundColor: '#f8d7da', 
+              borderRadius: '4px',
+              border: '1px solid #f5c6cb'
+            }}>
+              <strong>Error: </strong> {error}
+            </div>
+          )}
+          
+          {success && (
+            <div className="alert alert-success" style={{ 
+              color: '#155724', 
+              marginBottom: '15px', 
+              padding: '12px', 
+              backgroundColor: '#d4edda', 
+              borderRadius: '4px',
+              border: '1px solid #c3e6cb'
+            }}>
+              <strong>Success: </strong> {success}
+            </div>
+          )}
+
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
@@ -71,7 +242,7 @@ const LoginForm = () => {
             {({ isSubmitting, errors, touched, setFieldValue, values }) => (
               <Form autoComplete="off">
                 {/* Designation Label */}
-                <div className="designation-label">SELECT DESIGNATION</div>
+                <div className="designation-label">SELECT DESIGNATION *</div>
                 
                 {/* Designation Selection Field */}
                 <div className="form-group">
@@ -81,6 +252,11 @@ const LoginForm = () => {
                       type="button"
                       className={`designation-card ${values.Designation === 'Managing Officer' ? 'selected' : ''}`}
                       onClick={() => setFieldValue('Designation', 'Managing Officer')}
+                      disabled={loading}
+                      style={{ 
+                        opacity: loading ? 0.6 : 1,
+                        cursor: loading ? 'not-allowed' : 'pointer'
+                      }}
                     >
                       <div className="designation-icon-wrapper">
                         <div className="designation-icon">
@@ -99,6 +275,11 @@ const LoginForm = () => {
                       type="button"
                       className={`designation-card ${values.Designation === 'Security Officer' ? 'selected' : ''}`}
                       onClick={() => setFieldValue('Designation', 'Security Officer')}
+                      disabled={loading}
+                      style={{ 
+                        opacity: loading ? 0.6 : 1,
+                        cursor: loading ? 'not-allowed' : 'pointer'
+                      }}
                     >
                       <div className="designation-icon-wrapper">
                         <div className="designation-icon">
@@ -121,7 +302,7 @@ const LoginForm = () => {
 
                 {/* Email Field */}
                 <div className="form-group">
-                  <label htmlFor="EmailId">EMAIL ADDRESS</label>
+                  <label htmlFor="EmailId">EMAIL ADDRESS *</label>
                   <Field
                     type="email"
                     name="EmailId"
@@ -129,6 +310,7 @@ const LoginForm = () => {
                     placeholder="Enter your email address"
                     className={`form-input ${errors.EmailId && touched.EmailId ? 'error' : ''}`}
                     autoComplete="off"
+                    disabled={loading}
                   />
                   <ErrorMessage
                     name="EmailId"
@@ -139,7 +321,7 @@ const LoginForm = () => {
 
                 {/* Password Field */}
                 <div className="form-group">
-                  <label htmlFor="Password">PASSWORD</label>
+                  <label htmlFor="Password">PASSWORD *</label>
                   <div className="password-field">
                     <div className="password-input-wrapper">
                       <Field
@@ -149,12 +331,14 @@ const LoginForm = () => {
                         placeholder="Enter your password"
                         className={`form-input ${errors.Password && touched.Password ? 'error' : ''}`}
                         autoComplete="new-password"
+                        disabled={loading}
                       />
                       <button
                         type="button"
                         onClick={togglePasswordVisibility}
                         className="password-toggle"
                         aria-label={showPassword ? "Hide password" : "Show password"}
+                        disabled={loading}
                       >
                         {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                       </button>
@@ -170,11 +354,15 @@ const LoginForm = () => {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || loading}
                   className="submit-button"
+                  style={{
+                    opacity: (isSubmitting || loading) ? 0.7 : 1,
+                    cursor: (isSubmitting || loading) ? 'not-allowed' : 'pointer'
+                  }}
                 >
-                  {isSubmitting ? (
-                    <span className="spinner"></span>
+                  {loading ? (
+                    <span className="spinner">Logging in...</span>
                   ) : (
                     "Login"
                   )}
@@ -182,6 +370,18 @@ const LoginForm = () => {
               </Form>
             )}
           </Formik>
+
+          {/* Role information note */}
+          <div style={{ 
+            marginTop: '20px', 
+            textAlign: 'center', 
+            fontSize: '12px', 
+            color: '#666',
+            borderTop: '1px solid #eee',
+            paddingTop: '15px'
+          }}>
+            <p>Please select your correct designation. You will only be able to login if your registered role matches the selected designation.</p>
+          </div>
         </div>
       </div>
     </div>

@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    user: "sanjeev kumar",
-    token: "twefjkjasdfasjfuoipfjfjuojffjsnflkusdlikfrsdhfjk",
-    isLogged: true,
-    role: "ManagementOfficer",
-    UserId: "CUST-100",
+    user: null,
+    token: null,
+    isLogged: false,
+    role: null,
+    UserId: null,
 };
 
 export const AuthSlice = createSlice({

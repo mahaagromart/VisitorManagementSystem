@@ -1,90 +1,72 @@
-// import { useEffect, useRef } from "react";
-// import axios from "axios";
+// import { useEffect } from "react";
 // import { useSelector, useDispatch } from "react-redux";
-// import { login } from "../redux/Features/AuthSlice";
+// import { login, logout } from "../redux/Features/AuthSlice";
 // import { useNavigate } from "react-router-dom";
-
 
 // const ProtectedRoutes = ({ children }) => {
 //   const dispatch = useDispatch();
 //   const navigate = useNavigate();
-//   const apiUrl = import.meta.env.VITE_API_URL;
-
-//   const { user, token, isLogged } = useSelector((state) => state.auth);
-//   const storedToken = token || localStorage.getItem("token");
-//   const UserId = localStorage.getItem("UserId");
-
-//   const hasFetched = useRef(false);
+//   const { user, role, token, isLogged, UserId } = useSelector((state) => state.auth);
 
 //   useEffect(() => {
-//     const fetchUser = async () => {
-//       if (!storedToken || !UserId) {
-//         navigate("/login");
-//         return;
-//       }
+//     // Check localStorage and populate Redux if needed
+//     const checkAndPopulateFromStorage = () => {
+//       const storedToken = localStorage.getItem("token");
+//       const storedUser = localStorage.getItem("user");
+//       const storedRole = localStorage.getItem("role");
+//       const storedUserId = localStorage.getItem("UserId");
+//       const storedEmail = localStorage.getItem("email");
 
-//       dispatch(startLoading());
+//       // If we have token and userId in localStorage
+//       if (storedToken && storedUserId) {
+//         // Check if Redux state is empty or mismatched
+//         const isReduxEmpty = !user || !role || !token || !isLogged;
+//         const isReduxMismatched = 
+//           (token && token !== storedToken) || 
+//           (UserId && UserId !== storedUserId);
 
-//       try {
-//         const url = `${apiUrl}Authentication/GetUserProfile`;
-//         const response = await axios.post(
-//           `${url}?UserId=${UserId}`,
-//           {},
-//           {
-//             headers: {
-//               Authorization: `Bearer ${storedToken}`,
-//             },
-//           }
-//         );
-
-
-//         if (response.data && response.data.code === 200) {
-//           const userProfile = response.data.userProfilesEntity?.$values?.[0];
-
-//           if (!userProfile) {
-//             navigate("/login");
-//             return;
-//           }
-
-//           dispatch(
-//             login({
-//               user: `${userProfile.firstName} ${userProfile.lastName}`,
-//               role: userProfile.designationName,
-//               token: storedToken,
-//               UserId: UserId,
-//             })
-//           );
-//         } else {
-//           console.warn("Invalid response or unauthorized access");
-//           navigate("/login");
+//         if (isReduxEmpty || isReduxMismatched) {
+//           console.log("Populating Redux from localStorage");
+//           dispatch(login({
+//             user: storedUser || "",
+//             token: storedToken,
+//             role: storedRole || "",
+//             email: storedEmail || "",
+//             UserId: storedUserId
+//           }));
 //         }
-//       } catch (error) {
-//         console.error("Error fetching user profile:", error.response?.data || error.message);
+        
+//         // User is authenticated, stay on current page
+//         return true;
+//       } else {
+//         // No valid localStorage data, redirect to login
+//         console.log("No valid localStorage data, redirecting to login");
+//         dispatch(logout());
 //         navigate("/login");
-//       } finally {
-//         dispatch(stopLoading());
+//         return false;
 //       }
 //     };
 
-//     if (!user && storedToken && UserId && !hasFetched.current) {
-//       hasFetched.current = true;
-//       fetchUser();
-//     }
-//   }, [storedToken, UserId, dispatch, navigate, user, apiUrl]);
+//     checkAndPopulateFromStorage();
+//   }, [dispatch, navigate, user, role, token, isLogged, UserId]);
 
-//   return storedToken && UserId && isLogged ? children : null;
+//   // Get current auth state
+//   const currentToken = token || localStorage.getItem("token");
+//   const currentUserId = UserId || localStorage.getItem("UserId");
+//   const isUserLoggedIn = isLogged || (currentToken && currentUserId);
+
+//   return isUserLoggedIn ? children : null;
 // };
 
 // export default ProtectedRoutes;
 
-import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 
 const ProtectedRoutes = ({ children }) => {
-  const { isLogged } = useSelector((state) => state.auth);
+  const { token } = useSelector((state) => state.auth);
 
-  if (!isLogged) {
+  if (!token) {
     return <Navigate to="/login" replace />;
   }
 

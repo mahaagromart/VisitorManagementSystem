@@ -1,107 +1,70 @@
 import React, { useState, useEffect } from "react";
-import { Tabs, Card, Row, Col, Typography, Divider } from "antd";
-import { HiUserAdd } from "react-icons/hi";
-import { IoListCircleOutline } from "react-icons/io5";
+import { Card, Row, Col, Typography, Divider, message } from "antd";
 import DateTimeHeader from "../../components/dashboard/DateTimeHeader";
 import OptionCards from "../../components/dashboard/OptionCards";
 import BackButton from "../../components/common/BackButton";
-import AddUser from "../../components/dashboard/AddUser";
 import ListOfUser from "../../components/dashboard/ListOfUser";
+import AddUser from "../../components/dashboard/AddUser";
+import axios from "axios";
+import { useSelector } from "react-redux";
 import "./MahagementOfficerHome.css";
 
 const { Title } = Typography;
-const { TabPane } = Tabs;
 
 const MahagementOfficerHome = () => {
-  const [activeTab, setActiveTab] = useState("1");
   const [showOptions, setShowOptions] = useState(true);
+  const [activeView, setActiveView] = useState('view'); // 'add' or 'view'
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [users, setUsers] = useState([
-    {
-      id: 1,
-      name: "John Doe",
-      email: "john@example.com",
-      role: "Admin",
-      status: "Pending",
-      phone: "+1 234 567 890",
-      department: "Engineering",
-      requestDate: "2024-01-15"
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      email: "jane@example.com",
-      role: "Manager",
-      status: "Approved",
-      phone: "+1 234 567 891",
-      department: "Marketing",
-      requestDate: "2024-01-14"
-    }
-  ]);
+  const [stats, setStats] = useState({
+    total: 0, approved: 0, rejected: 0, pending: 0
+  });
 
-  // Calculate stats
-  const stats = {
-    total: users.length,
-    approved: users.filter(u => u.status === "Approved").length,
-    rejected: users.filter(u => u.status === "Rejected").length,
-    pending: users.filter(u => u.status === "Pending").length
-  };
+  const { token, role } = useSelector((state) => state.auth); // ✅ get role
+  const API_URL = import.meta.env.VITE_API_URL;
 
-  // Update time every second
+  // ✅ Fetch real stats
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
+    const fetchStats = async () => {
+      try {
+        const endpoint = role === 'MANAGEMENTOFFICER'
+          ? 'visitors/assigned'
+          : 'visitors/my-visitors';
 
+        const res = await axios.get(`${API_URL}${endpoint}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = res.data.data;
+        setStats({
+          total: data.length,
+          approved: data.filter(v => v.status === 'APPROVED').length,
+          rejected: data.filter(v => v.status === 'REJECTED').length,
+          pending: data.filter(v => v.status === 'PENDING').length,
+        });
+      } catch {
+        message.error('Failed to fetch stats');
+      }
+    };
+    fetchStats();
+  }, []);
+
+  // Clock
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
 
-  // Format date and time
   const formattedDate = currentTime.toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
   });
-  
+
   const formattedTime = currentTime.toLocaleTimeString('en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
+    hour: '2-digit', minute: '2-digit', second: '2-digit'
   });
 
-  // Handle option selection
+  // ✅ Handle option select
   const handleOptionSelect = (option) => {
+    setActiveView(option);
     setShowOptions(false);
-    if (option === 'add') {
-      setActiveTab("1");
-    } else if (option === 'view') {
-      setActiveTab("2");
-    }
-  };
-
-  // Handle back to options
-  const handleBackToOptions = () => {
-    setShowOptions(true);
-  };
-
-  // Handle new user addition
-  const handleAddUser = (newUser) => {
-    setUsers([...users, { 
-      ...newUser, 
-      id: users.length + 1, 
-      status: "Pending",
-      requestDate: new Date().toISOString().split('T')[0]
-    }]);
-    setActiveTab("2");
-    setShowOptions(false);
-  };
-
-  // Handle approval status update
-  const handleStatusUpdate = (userId, newStatus) => {
-    setUsers(users.map(user => 
-      user.id === userId ? { ...user, status: newStatus } : user
-    ));
   };
 
   return (
@@ -109,10 +72,9 @@ const MahagementOfficerHome = () => {
       <Row gutter={[24, 24]} justify="center">
         <Col xs={24} sm={22} md={20} lg={18} xl={16}>
           <Card className="contentCard">
-            {/* Date and Time Header Component */}
+
             <DateTimeHeader date={formattedDate} time={formattedTime} />
 
-            {/* Main Content */}
             {showOptions ? (
               <>
                 <div className="optionsTitle">
@@ -121,64 +83,29 @@ const MahagementOfficerHome = () => {
                   </Title>
                 </div>
 
-                {/* Option Cards Component */}
-                <OptionCards 
+                {/* ✅ Pass role so OptionCards can hide Add for MANAGEMENTOFFICER */}
+                <OptionCards
                   onSelect={handleOptionSelect}
                   stats={stats}
+                  role={role}
                 />
               </>
             ) : (
               <>
-                {/* Back Button Component */}
-                <BackButton onClick={handleBackToOptions} />
+                <BackButton onClick={() => setShowOptions(true)} />
 
                 <div className="approvalHeader">
                   <Title level={2} className="approvalTitle">
-                    Request for New Approval
+                    {activeView === 'add' ? 'Add New Visitor' : 'Visitor Approval Requests'}
                   </Title>
                   <Divider className="divider" />
                 </div>
 
-                <Tabs 
-                  activeKey={activeTab} 
-                  onChange={setActiveTab}
-                  centered
-                  size="large"
-                  tabBarStyle={{ 
-                    marginBottom: "24px",
-                    borderBottom: "none"
-                  }}
-                  className="tabContainer"
-                >
-                  <TabPane 
-                    tab={
-                      <div className={`tabItem ${activeTab === "1" ? "tabItemActive" : ""}`}>
-                        <HiUserAdd className="tabIcon" />
-                        <span>Add User</span>
-                      </div>
-                    } 
-                    key="1"
-                  >
-                    <AddUser onAddUser={handleAddUser} />
-                  </TabPane>
-
-                  <TabPane 
-                    tab={
-                      <div className={`tabItem ${activeTab === "2" ? "tabItemActive" : ""}`}>
-                        <IoListCircleOutline className="tabIcon" />
-                        <span>Approval Requests ({stats.pending})</span>
-                      </div>
-                    } 
-                    key="2"
-                  >
-                    <ListOfUser 
-                      users={users} 
-                      onStatusUpdate={handleStatusUpdate}
-                    />
-                  </TabPane>
-                </Tabs>
+                {/* ✅ Show correct component based on selection */}
+                {activeView === 'add' ? <AddUser /> : <ListOfUser />}
               </>
             )}
+
           </Card>
         </Col>
       </Row>

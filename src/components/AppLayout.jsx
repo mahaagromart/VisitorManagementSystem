@@ -1,36 +1,27 @@
-import React, { useEffect } from "react";
+import React ,{useEffect} from "react";
 import { Layout } from "antd";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ManagementOfficerRoute from "../routes/ManagementOfficerRoute";
 import SecurityOfficerRoute from "../routes/SecurityOfficerRoute";
-import { logout } from "../redux/Features/AuthSlice";
+import { login, logout } from "../redux/Features/AuthSlice";
+import { Navigate } from "react-router-dom";
 
 const { Content } = Layout;
+
 const AppLayout = () => {
-  const { role, user, isLogged } = useSelector((state) => state.auth);
+  const { role, user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
-  
+
   const handleLogout = () => {
     dispatch(logout());
     localStorage.clear();
     navigate("/login");
   };
 
-  useEffect(() => {
-    if (!isLogged) {
-      navigate("/login");
-    }
-  }, [isLogged, navigate]);
-
-  // Don't render content if not logged in
-  if (!isLogged) {
-    return null;
-  }
 
   return (
     <Layout style={{ minHeight: "100vh", background: "#f0f2f5" }}>
@@ -40,13 +31,16 @@ const AppLayout = () => {
         onLogout={handleLogout}
       />
       <Content>
-        {role === "ManagementOfficer" ? (
+        {role === "MANAGEMENTOFFICER" ? (
           <ManagementOfficerRoute />
-        ) : (
+        ) : role === "SECURITYOFFICER" ? (
           <SecurityOfficerRoute />
+        ) : (
+          
+          <Navigate to="/login" replace />
         )}
       </Content>
-      <Footer/>
+      <Footer />
     </Layout>
   );
 };
