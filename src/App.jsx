@@ -1,14 +1,21 @@
+// [file name]: src/App.jsx
 import React, { useEffect } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import LoginForm from './pages/Login/LoginForm';
 import AppLayout from './components/AppLayout';
 import { login } from './redux/Features/AuthSlice';
+// Import the FCM hook
+import { useFCM } from './hooks/useFCM';
 // import { Navigate } from 'react-router-dom';
+
 function App() {
-  const { token } = useSelector((state) => state.auth);
+  const { token, role, isLogged } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const location = useLocation();
+
+  // Initialize FCM for management officers and admins when user is logged in
+  useFCM();
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -18,8 +25,11 @@ function App() {
     const storedEmail = localStorage.getItem("email");
 
     if (storedToken && storedUserId && !token) {
+      // Parse storedUser if it's a string
+      const userData = storedUser ? JSON.parse(storedUser) : null;
+      
       dispatch(login({
-        user: storedUser,
+        user: userData || { username: storedUser }, // Handle both cases
         token: storedToken,
         role: storedRole,
         email: storedEmail,
